@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SaveDialog</class>
+ <widget class="QDialog" name="SaveDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>462</width>
+    <height>324</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Sauvegarde</string>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QCommandLinkButton" name="saveSequences">
+     <property name="text">
+      <string>Sauvegarde de séquences</string>
+     </property>
+     <property name="icon">
+      <iconset resource="toolbar.qrc">
+       <normaloff>:/images/films.png</normaloff>:/images/films.png</iconset>
+     </property>
+     <property name="description">
+      <string>Panneau de sauvegarde des images (non traitées) d'une vidéo, possibilité de sauvegarder un nombre de frames défini mais aussi l'intégralités des images de la vidéo.</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCommandLinkButton" name="saveResult">
+     <property name="text">
+      <string>Sauvegarde résultat</string>
+     </property>
+     <property name="icon">
+      <iconset resource="toolbar.qrc">
+       <normaloff>:/images/image-export.png</normaloff>:/images/image-export.png</iconset>
+     </property>
+     <property name="description">
+      <string>Sauvegarde l'image traitée actuellement disponible à l'écran.</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QCommandLinkButton" name="exportResult">
+       <property name="text">
+        <string>Exporter résultat</string>
+       </property>
+       <property name="icon">
+        <iconset resource="toolbar.qrc">
+         <normaloff>:/images/document-export.png</normaloff>:/images/document-export.png</iconset>
+       </property>
+       <property name="description">
+        <string>Exporte une image traitée (en binarisation ou binarisation inverse) en un ficier de coordonnées.</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCommandLinkButton" name="importFile">
+       <property name="text">
+        <string>Importer résultat</string>
+       </property>
+       <property name="icon">
+        <iconset resource="toolbar.qrc">
+         <normaloff>:/images/document-import.png</normaloff>:/images/document-import.png</iconset>
+       </property>
+       <property name="description">
+        <string>Importe un fichier de coordonnées pour générer une image correspondante.</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Close</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="toolbar.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>SaveDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>SaveDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

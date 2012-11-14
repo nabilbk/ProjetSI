@@ -1,0 +1,161 @@
+#pragma once
+
+#include <math.h>
+#include "parameterdock.h"
+#include "imagescaledialog.h"
+
+#include <QtCore/QtGlobal>
+
+#include <QtGui/QMainWindow>
+#include <QtGui/QFileDialog>
+#include <QtGui/QMessageBox>
+#include <QtGui/QScrollBar>
+#include <QtGui/QPainter>
+#include <QtGui/QGraphicsView>
+#include <QtGui/QGraphicsScene>
+#include <QtGui/QGraphicsPixmapItem>
+#include <QtGui/QPen>
+#include <QtGui/QSlider>
+#include <QtGui/QLineEdit>
+#include <QtGui/QSpacerItem>
+#include <QtGui/QResizeEvent>
+
+namespace Ui
+{
+    class MainWindow;
+}
+
+class Controller;
+/**
+ * @class MainWindow
+ *
+ * Fenêtre principale du programme
+ */
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+
+private:
+    Controller *controller;
+
+    QGraphicsPixmapItem *imageItem;
+
+    qreal scaleFactor, normalFactor;
+    QSizeF normalImageSize;
+    QSlider *seekBar;
+    QLineEdit *seekEdit;
+    ImageScaleDialog imageScaleDialog;
+
+    Ui::MainWindow *ui;
+
+    /**
+      * Ajuste la taille de l'image
+      *
+      * @param factor facteur d'ajustement de la taille
+      */
+    void scaleImage(qreal factor);
+
+    /**
+      * Ajustement des scrollbars en fonction de la taille de l'image
+      *
+      * @param scrollBar Le pointeur sur la scrollbar.
+      * @param factor Le facteur d'ajustement.
+      */
+    void adjustScrollBar(QScrollBar *scrollBar, qreal factor);
+
+    /**
+      * Mise à jour des menus en fonction des incompatibilités (zoom et échelle)
+      */
+    void updateActions();
+
+
+
+public:
+    MainWindow(Controller *control, QWidget *parent = 0);
+    ~MainWindow();
+
+    void resizeEvent(QResizeEvent *event);
+    void sceneChanged(QGraphicsScene* cScene, QGraphicsPixmapItem* cImageItem);
+
+public slots:
+    /**
+     * Evènement : clic sur le bouton Ouvrir une image
+     */
+    void openImage();
+
+    /**
+     * Evènement : clic sur le bouton Ouvrir une vidéo
+     */
+    void openVideo();
+
+    /**
+     * Evènement : clic sur le bouton Ouvrir un flux vidéo
+     */
+    void openWebcam();
+
+    /**
+     * Evènement : clic sur le bouton Fermer
+     */
+    void closeCurrent();
+
+    /**
+     * Fonction de dessin par lot
+     */
+    void processBatch();
+
+    /**
+     * Evènement : clic sur le bouton Zoom+
+     */
+    void zoomIn();
+
+    /**
+     * Evènement : clic sur le bouton Zoom-
+     */
+    void zoomOut();
+
+    /**
+     * Evènement : clic sur le bouton Zoom normal
+     */
+    void normalSize();
+
+    /**
+     * Evènement : click sur le bouton Zoom auto
+     */
+    void fitToWindow();
+
+    /**
+     * Evènement : coche l'affichage des paramètres
+     */
+    void tickParameter();
+
+    /**
+     * Rend le bouton de traitement cliquable ou non
+     */
+    void enableProcess(bool enabled);
+
+    /**
+     * Définit l'échelle de l'image
+     */
+    void imageScale();
+
+    /**
+     * Evènement : clique sur le bouton de selection de zone d'intérêt
+     */
+    void clickZoneInteret();
+
+    /**
+     * Evènement : clique sur le bouton de déplacement avec la main
+     */
+    void hand();
+
+signals:
+    void imageChanged(QImage*);
+    void videoChanged(QString);
+    void imageClosed();
+<<<<<<< HEAD
+    void zoneSelected(float, float, float, float);
+    void videoClosed();
+=======
+    void zoneSelected(QRectF*);
+>>>>>>> 03a8b1a36d7411d69897a0d6fccb70dc53a089d6
+};

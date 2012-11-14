@@ -1,0 +1,429 @@
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+#include "controller.h"
+#include <QDebug>
+
+MainWindow::MainWindow(Controller *control,QWidget *parent) :
+    QMainWindow(parent),
+    controller(control),
+    imageItem(0),
+    scaleFactor(1),
+    normalFactor(1),
+    normalImageSize(1,1),
+    seekBar(new QSlider(Qt::Horizontal,this)),
+    seekEdit(new QLineEdit(this)),
+    imageScaleDialog(this),
+    ui(new Ui::MainWindow)
+{
+    // Interface
+    ui->setupUi(this);
+
+    // Enregistrement des event handlers
+    connect(ui->imageOpenAct,       SIGNAL(triggered()),        this,       SLOT(openImage()));
+    connect(ui->videoOpenAct,       SIGNAL(triggered()),        this,       SLOT(openVideo()));
+    connect(ui->webcamOpenAct,      SIGNAL(triggered()),        controller, SLOT(openWebcam()));
+    connect(ui->closeAct,           SIGNAL(triggered()),        this,       SLOT(closeCurrent()));
+    connect(ui->exitAct,            SIGNAL(triggered()),        controller, SLOT(deleteLater()));
+    connect(ui->zoomInAct,          SIGNAL(triggered()),        this,       SLOT(zoomIn()));
+    connect(ui->zoomOutAct,         SIGNAL(triggered()),        this,       SLOT(zoomOut()));
+    connect(ui->normalSizeAct,      SIGNAL(triggered()),        this,       SLOT(normalSize()));
+    connect(ui->processAct,         SIGNAL(triggered()),        controller, SLOT(process()));
+    connect(ui->processBatchAct,    SIGNAL(triggered()),        controller, SLOT(process()));
+    connect(ui->fitToWindowAct,     SIGNAL(triggered()),        this,       SLOT(fitToWindow()));
+    connect(ui->playAct,            SIGNAL(triggered()),        controller, SLOT(play()));
+    connect(ui->pauseAct,           SIGNAL(triggered()),        controller, SLOT(pause()));
+    connect(ui->showParameterAct,   SIGNAL(triggered(bool)),    controller, SLOT(showParameter(bool)));
+    connect(ui->selectionAct,       SIGNAL(triggered()),        this,       SLOT(clickZoneInteret()));
+    connect(ui->handAct,            SIGNAL(triggered()),        this,       SLOT(hand()));
+    connect(ui->manualSelectionAct, SIGNAL(triggered()),        this,       SLOT(manualSelection()));
+
+    connect(controller,           SIGNAL(processReady(bool)), this,       SLOT(enableProcess(bool)));
+    connect(this,                 SIGNAL(destroyed()),        controller, SLOT(deleteLater()));
+    connect(ui->scaleAct,         SIGNAL(triggered()),        this,       SLOT(imageScale()));
+    connect(&imageScaleDialog,    SIGNAL(scaleSet(qreal)),    this,       SLOT(imageScale(qreal)));
+    connect(ui->fastAct,          SIGNAL(triggered(bool)),    controller, SLOT(fastForward(bool)));
+
+    connect(controller, SIGNAL(tickShowParameterOption(bool)),this,       SLOT(tickParameter(bool)));
+
+    connect(this,       SIGNAL(imageChanged(QImage*)), controller, SLOT(loadImage(QImage*)));
+    connect(this,       SIGNAL(videoChanged(QString)), controller, SLOT(loadVideo(QString)));
+    connect(this,       SIGNAL(imageClosed()),         controller, SLOT(imageClosed()));
+    connect(this,       SIGNAL(videoClosed()),         controller, SLOT(videoClosed()));
+    connect(this,       SIGNAL(changeGraphicMode(int)),              controller,   SLOT(changeGraphicMode(int)));
+
+    connect(ui->imageView,   SIGNAL(onScroll()),    this,      SLOT(secondDrag()));
+    connect(ui->secondImage, SIGNAL(onScroll()),    this,      SLOT(firstDrag()));
+
+    // Etats initaux des menus et autres
+    ui->fitToWindowAct->setEnabled(true);
+    resetButtons(false, TOUT);
+
+    seekBar->setMaximumWidth(300);
+    ui->toolBar->addWidget(seekBar);
+    ui->toolBar->addSeparator();
+
+    seekEdit->setMaximumWidth(100);
+    ui->toolBar->addWidget(seekEdit);
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+void MainWindow::resetButtons(bool val, int type)
+{
+    switch(type)
+    {
+    case 0:
+        ui->processAct->setEnabled(val);
+        ui->scaleAct->setEnabled(val);
+        ui->fastAct->setEnabled(val);
+        ui->playAct->setEnabled(val);
+        ui->pauseAct->setEnabled(val);
+        seekBar->setEnabled(val);
+        seekEdit->setEnabled(val);
+        break;
+    case 1:
+        ui->processAct->setEnabled(val);
+        ui->scaleAct->setEnabled(val);
+        ui->fastAct->setEnabled(!val);
+        ui->playAct->setEnabled(!val);
+        ui->pauseAct->setEnabled(!val);
+        seekBar->setEnabled(!val);
+        seekEdit->setEnabled(!val);
+        break;
+    case 2:
+        ui->processAct->setEnabled(val);
+        ui->scaleAct->setEnabled(!val);
+        ui->fastAct->setEnabled(val);
+        ui->playAct->setEnabled(val);
+        ui->pauseAct->setEnabled(val);
+        seekBar->setEnabled(val);
+        seekEdit->setEnabled(val);
+        break;
+    case 3:
+        ui->processAct->setEnabled(val);
+        ui->scaleAct->setEnabled(!val);
+        ui->fastAct->setEnabled(!val);
+        ui->playAct->setEnabled(val);
+        ui->pauseAct->setEnabled(val);
+        seekBar->setEnabled(!val);
+        seekEdit->setEnabled(!val);
+        break;
+
+    }
+}
+
+void MainWindow::openImage()
+{ 
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Ouvrir un fichier"), QDir::currentPath(), tr("Images (*.png *.gif *.jpg *.tif *.bmp)"));
+
+    if (!fileName.isEmpty())
+    {
+        QImage *image = new QImage(fileName);
+
+        if (image->isNull())
+        {
+            QMessageBox::information(this, tr("Erreur"), tr("Impossible de charger %1.").arg(fileName));
+            delete image;
+
+            return;
+        }
+<<<<<<< HEAD
+=======
+        if (binaryScene != 0)
+            binaryScene->clear();
+>>>>>>> 2fbdb6c2687d2b3916825c18a09961e77c11575d
+
+        emit imageChanged(image);
+    }
+    else
+        resetButtons(false, TOUT);
+}
+
+void MainWindow::openVideo()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Ouvrir un fichier"), QDir::currentPath(), tr("Vidéos (*.avi)"));
+
+    if (!fileName.isEmpty())
+    {
+        emit videoChanged(fileName);
+    }
+
+}
+
+void MainWindow::closeCurrent()
+{
+    resetButtons(false, TOUT);
+<<<<<<< HEAD
+=======
+    if (controller->getMode() == 0 && binaryScene != 0)
+        binaryScene->clear();
+>>>>>>> 2fbdb6c2687d2b3916825c18a09961e77c11575d
+    emit videoClosed();
+    emit imageClosed();
+}
+
+void MainWindow::processBatch()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Ouvrir un fichier"), QDir::currentPath());
+
+    if (!fileName.isEmpty())
+    {
+        //fonction à laquelle il faut passer le chemin du fichier.
+    }
+}
+
+void MainWindow::sceneChanged(CustomGraphicsScene *cScene, QGraphicsPixmapItem *cImageItem)
+{
+    imageItem = cImageItem;
+    ui->imageView->setScene(cScene);
+
+    // Si l'image est à l'échelle de la fenetre, la taille est ajusté au démarrage
+    fitToWindow();
+}
+
+void MainWindow::binarySceneChanged(CustomGraphicsScene *binaryScene)
+{
+    ui->secondImage->setScene(binaryScene);
+}
+
+
+void MainWindow::fitToWindow()
+{
+    // Si on a décoché l'image à l'échelle, on la remet à sa taille initiale
+    ui->imageView->scale(1 / normalImageSize.width(), 1 / normalImageSize.height());
+    if (controller->getMode() == 0)
+        ui->secondImage->scale(1 / normalImageSize.width(), 1 / normalImageSize.height());
+    normalImageSize.setWidth(1);
+    normalImageSize.setHeight(1);
+    normalSize();
+
+    if (ui->fitToWindowAct->isChecked())
+    {
+        ui->imageView->fitInView(QRectF(0,0,(qreal)imageItem->pixmap().width(),(qreal)imageItem->pixmap().height()),Qt::IgnoreAspectRatio);
+        if (controller->getMode() == 0)
+            ui->secondImage->fitInView(QRectF(0,0,(qreal)imageItem->pixmap().width(),(qreal)imageItem->pixmap().height()),Qt::IgnoreAspectRatio);
+
+        normalImageSize.setWidth
+                (normalImageSize.width() * (qreal)ui->imageView->size().width()
+                                         / (qreal)imageItem->pixmap().width());
+        normalImageSize.setHeight
+                (normalImageSize.height() * (qreal)ui->imageView->size().height()
+                                          / (qreal)imageItem->pixmap().height());
+    }
+
+    updateActions();
+}
+
+void MainWindow::zoomIn()
+{
+    ui->imageView->setDualMode(false);
+    ui->secondImage->setDualMode(false);
+    scaleImage(1.20);
+    ui->imageView->setDualMode(true);
+    ui->secondImage->setDualMode(true);
+}
+
+void MainWindow::zoomOut()
+{
+    ui->imageView->setDualMode(false);
+    ui->secondImage->setDualMode(false);
+    scaleImage(1 / 1.20);
+    ui->imageView->setDualMode(true);
+    ui->secondImage->setDualMode(true);
+}
+
+void MainWindow::normalSize()
+{
+    ui->imageView->scale(normalFactor, normalFactor);
+    if (controller->getMode() == 0)
+        ui->secondImage->scale(normalFactor, normalFactor);
+    normalFactor = 1;
+}
+
+void MainWindow::updateActions()
+{
+    // On désactive certains menus mutuellement exclusifs
+    ui->zoomInAct->setEnabled(!ui->fitToWindowAct->isChecked());
+    ui->zoomOutAct->setEnabled(!ui->fitToWindowAct->isChecked());
+    ui->normalSizeAct->setEnabled(!ui->fitToWindowAct->isChecked());
+}
+
+void MainWindow::scaleImage(qreal factor)
+{
+    normalFactor /= factor;
+
+    ui->imageView->scale(factor, factor);
+    if (controller->getMode() == 0)
+    {
+        ui->secondImage->scale(factor, factor);
+    }
+
+    /*adjustScrollBar(ui->imageView->horizontalScrollBar(), factor);
+    adjustScrollBar(ui->imageView->verticalScrollBar(),   factor);
+
+
+        adjustScrollBar(ui->secondImage->horizontalScrollBar(), factor);
+        adjustScrollBar(ui->secondImage->verticalScrollBar(),   factor);
+    }*/
+
+    // On empêche le zoom ou dézoom si les valeurs sont trop fortes
+    ui->zoomInAct->setEnabled(normalFactor  > 0.2);
+    ui->zoomOutAct->setEnabled(normalFactor < 5);
+}
+
+void MainWindow::adjustScrollBar(QScrollBar *scrollBar, qreal factor)
+{
+    // On ajuste la valeur des scrollbars
+    scrollBar->setValue((int)(factor * scrollBar->value() + ((factor - 1) * scrollBar->pageStep() / 2)));
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event )
+{
+    // On redimensionne la fenêtre
+    resize(event->size());
+
+    if (imageItem != NULL)
+    {
+        // Si l'image est initialisée
+        if (ui->fitToWindowAct->isChecked())
+        {
+            // Et si l'image est à l'échelle
+            // On la fait remplir la fenêtre
+            qreal fenX = (qreal)size().width(),
+                  fenY = (qreal)size().height(),
+                  imX  = (qreal)event->oldSize().width(),
+                  imY  = (qreal)event->oldSize().height();
+
+            ui->imageView->fitInView(QRectF(0,0,(qreal)imageItem->pixmap().width(),(qreal)imageItem->pixmap().height()),Qt::IgnoreAspectRatio);
+            if (controller->getMode() == 0)
+            {
+                ui->secondImage->fitInView(QRectF(0,0,(qreal)imageItem->pixmap().width(),(qreal)imageItem->pixmap().height()),Qt::IgnoreAspectRatio);
+                //ui->secondImage->setFixedSize(ui->imageView->size());
+            }
+            normalImageSize.setWidth(normalImageSize.width()   * (fenX / imX));
+            normalImageSize.setHeight(normalImageSize.height() * (fenY / imY));
+        }
+    }
+}
+
+void MainWindow::tickParameter(bool val)
+{
+    ui->showParameterAct->setChecked(val);
+}
+
+void MainWindow::enableProcess(bool enabled)
+{
+    if (enabled)
+        QApplication::restoreOverrideCursor();
+    else
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+
+    ui->processAct->setEnabled(enabled);
+    ui->imageOpenAct->setEnabled(enabled);
+    ui->videoOpenAct->setEnabled(enabled);
+    ui->webcamOpenAct->setEnabled(enabled);
+}
+
+void MainWindow::imageScale()
+{
+    controller->scaleMode();
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
+}
+
+void MainWindow::imageScale(qreal realDist)
+{
+    controller->scale(realDist);
+}
+
+void MainWindow::showScale()
+{
+    imageScaleDialog.show();
+    QApplication::restoreOverrideCursor();
+}
+
+void MainWindow::clickZoneInteret()
+{
+    ui->manualSelectionAct->setChecked(false);
+    ui->handAct->setChecked(false);
+    ui->selectionAct->setChecked(true);
+    ui->imageView->setDragMode(QGraphicsView::RubberBandDrag);
+    controller->setAutoMode(true);
+    if (imageItem != 0)
+        emit changeGraphicMode(RUBBERBAND);
+}
+
+void MainWindow::hand()
+{
+    ui->manualSelectionAct->setChecked(false);
+    ui->handAct->setChecked(true);
+    ui->selectionAct->setChecked(false);
+    ui->imageView->setDragMode(QGraphicsView::ScrollHandDrag);
+    controller->setAutoMode(true);
+    emit changeGraphicMode(SCROLLHAND);
+}
+
+void MainWindow::manualSelection()
+{
+    ui->manualSelectionAct->setChecked(true);
+    ui->handAct->setChecked(false);
+    ui->selectionAct->setChecked(false);
+    ui->imageView->setDragMode(QGraphicsView::NoDrag);
+    controller->setAutoMode(false);
+    if (imageItem != 0)
+        emit changeGraphicMode(MANUALSELECTION);
+}
+
+void MainWindow::showSecondImage()
+{
+    ui->imageView->setDualMode(true);
+    ui->secondImage->setDualMode(true);
+    ui->secondImage->setVisible(true);
+    ui->secondImage->setSizeIncrement(0,0);
+    //ui->secondImage->setFixedSize(ui->imageView->size());
+}
+
+void MainWindow::hideSecondImage()
+{
+    ui->imageView->setDualMode(false);
+    ui->secondImage->setDualMode(false);
+    ui->secondImage->setVisible(false);
+}
+
+<<<<<<< HEAD
+=======
+void MainWindow::setBinaryImage(const QPixmap &pix)
+{
+    if (binaryScene == 0)
+        binaryScene = new QGraphicsScene();
+    else
+        binaryScene->clear();
+    binaryScene->addPixmap(pix);
+
+    ui->secondImage->setScene(binaryScene);
+}
+
+>>>>>>> 2fbdb6c2687d2b3916825c18a09961e77c11575d
+void MainWindow::manualSelectionSetEnabled(bool val)
+{
+    ui->manualSelectionAct->setEnabled(val);
+}
+
+void MainWindow::firstDrag()
+{
+    ui->imageView->horizontalScrollBar()->setSliderPosition(ui->secondImage->horizontalScrollBar()->sliderPosition());
+    ui->imageView->verticalScrollBar()->setSliderPosition(ui->secondImage->verticalScrollBar()->sliderPosition());
+}
+
+void MainWindow::secondDrag()
+{
+    ui->secondImage->horizontalScrollBar()->setSliderPosition(ui->imageView->horizontalScrollBar()->sliderPosition());
+    ui->secondImage->verticalScrollBar()->setSliderPosition(ui->imageView->verticalScrollBar()->sliderPosition());
+}
+
+void MainWindow::fast(bool val)
+{
+
+}

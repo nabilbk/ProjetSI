@@ -1,0 +1,225 @@
+#pragma once
+
+#include "mainwindow.h"
+#include "parameterdock.h"
+#include "houghcircledetectionpass.h"
+#include "customcircledetectionpass.h"
+#include "circledetectionpass.h"
+#include "binaryconversionpass.h"
+#include "graylevelpass.h"
+#include "gaussianblurpass.h"
+#include "imageprocessor.h"
+#include "cannyfilterpass.h"
+#include "extractvideo.h"
+#include "videoprocessor.h"
+#include "roipass.h"
+#include "customgraphicsscene.h"
+
+#include <QObject>
+#include <QImage>
+#include <QGraphicsPixmapItem>
+#include <QtGui/QPen>
+
+enum {
+    TOUT,
+    IMAGE,
+    VIDEO,
+    WEBCAM
+};
+
+class Controller : public QObject
+{
+    Q_OBJECT
+
+private:
+    MainWindow *mainWindow;
+    ParameterDock *parameterDock;
+    IplImage *image;
+    QPen redPen;
+    QPen bluePen;
+    HoughCircleDetectionPass *hough;
+    CustomCircleDetectionPass *custom;
+    CircleDetectionPass *currentMethod;
+<<<<<<< HEAD
+    BinaryConversionPass *binary;
+    GaussianBlurPass *gaussian;
+    GrayLevelPass *grayLevel;
+=======
+    BinaryConversionPass *bcp;
+    GaussianBlurPass *gbp;
+    CannyFilterPass *cfp;
+>>>>>>> 2fbdb6c2687d2b3916825c18a09961e77c11575d
+    ImageProcessor *imgProcessor;
+    PassChain passChain;
+    ROIPass *roi;
+    qreal fscale;
+    ExtractVideo video;
+    VideoProcessor *videoProcessor;
+    bool edgeVal;
+    bool binaryVal;
+    bool circleVal;
+    unsigned currentView;
+    QList<QGraphicsItem *> edgeList;
+    QList<QGraphicsItem *> circleList;
+    QGraphicsItemGroup *edgeGroup;
+    QGraphicsItemGroup *circleGroup;
+    short edgeFilter;
+
+public:
+    Controller();
+    ~Controller();
+    CustomGraphicsScene scene;
+    CustomGraphicsScene binaryScene;
+
+    int  getMode();
+
+    void setParameterDock(ParameterDock *newParameterDock);
+
+    void methodChanged(int index);
+
+    void customPassChain();
+
+    void houghPassChain();
+
+    void dropPassChain();
+
+    void drawPoint(pair<int, int> point);
+
+    void setAutoMode(bool val);
+    
+public slots:
+    /**
+     * Fonction de dessin sur l'image
+     */
+    void process();
+
+    /**
+     * Evènement : clic sur le bouton Play
+     */
+    void play();
+
+    /**
+     * Evènement : clic sur le bouton Stop
+     */
+    void pause();
+
+    /**
+     * Evènement : clic sur le bouton "avance rapide"
+     */
+    void fastForward(bool enabled);
+
+    /**
+     * Evènement : image défini
+     */
+    void loadImage( QImage* );
+
+    /**
+     * Evènement : vidéo défini
+     */
+    void loadVideo( QString );
+
+    /**
+     * Evènement : image fermé
+     */
+    void imageClosed();
+
+    /**
+     * Evènement : dessine des cercles sur l'image
+     */
+    void draw(Circle c);
+
+    /**
+     * Evènement : affiche la fenêtre de paramètres
+     */
+    void showParameter(bool check);
+
+    /**
+     * Evènement : décoche le menu quand la fenêtre de paramètres est fermé
+     */
+    void tickParameter(bool val);
+
+    /**
+     * Evènement : changement du mode (hand ou rubberBand)
+     */
+    void changeGraphicMode(int mode);
+
+    /**
+     * Modifie les parametre de la methode de hough avec les parametre de la barre de reglage.
+     */
+    void setParameters();
+
+    void scaleMode();
+
+    /**
+     * Le thread a terminé son traitement, recuperation des cercles et affichage.
+     *
+     * @param image Image traitée
+     */
+    void imageReady(IplImage *image);
+
+    /**
+     * Le thread a envoyé un nouveau frame
+     *
+     * @param image Nouveau frame a afficher
+     */
+    void nextFrame(IplImage *image);
+
+    /**
+     * Evènement : video fermé
+     */
+    void videoClosed();
+
+    /**
+     * Evènement : clic sur le bouton Ouvrir un flux vidéo
+     */
+    void openWebcam();
+
+    /**
+      * Récupére les coordonnées de la souris.
+      *
+      */
+    void scale(qreal realDist);
+
+    /**
+     * Evènement : sélectionne la région d'intérêt sur l'image
+     */
+    void confirmROI(QRectF*r);
+
+    /**
+     * Evenement : Detection d'un seul cercle
+     */
+    void onClick(QPointF mouse);
+
+    /**
+     * Evènement : afficher les contours a changé
+     */
+    void binaryBox_checked(bool val);
+
+    /**
+     * Evènement : afficher les contours a changé
+     */
+    void edgeBox_checked(bool val);
+
+    /**
+     * Evènement : afficher les cercles
+     */
+    void circleBox_checked(bool val);
+
+    /**
+     * Evenement : Fermeture de l'application
+     */
+    void onClose();
+
+
+signals:
+
+    /**
+     * Evènement : emet un signal pour que MainWindow décoche la case
+     */
+    void tickShowParameterOption(bool val);
+
+    /**
+     * Indique a la vue qu'un second traitement peut être lancé
+     */
+    void processReady(bool enabled);
+};

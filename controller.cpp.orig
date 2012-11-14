@@ -1,0 +1,535 @@
+#include "controller.h"
+#include <QDebug>
+#include <sstream>
+#include "passchain.h"
+#include "imageconverter.h"
+#include "customcircledetectionpass.h"
+
+static bool bLoadImage = false;
+
+enum
+{
+    PERSONNALISEE,
+    HOUGH,
+    GOUTTE
+};
+
+void destroy(QGraphicsItem * i)
+{
+    if (!bLoadImage)
+        delete i;
+}
+
+Controller::Controller() :
+    image(0),
+    currentMethod(0),
+    edgeVal(1),
+    binaryVal(1),
+    currentView(-1),
+    edgeGroup(0),
+    circleGroup(0),
+    nanoScale(1),
+    video(0)
+{
+    mainWindow = new MainWindow(this);
+    mainWindow->showMaximized();
+    parameterDock = new ParameterDock(this,mainWindow);
+    roi = new ROIPass();
+    mainWindow->addDockWidget(Qt::RightDockWidgetArea, parameterDock);
+    parameterDock->show();
+    redPen.setColor(QColor(255,0,0));
+    redPen.setWidth(1);
+    bluePen.setColor(QColor(0,0,255));
+    bluePen.setWidth(1);
+
+    hough = new HoughCircleDetectionPass();
+    custom = new CustomCircleDetectionPass();
+    binary = new BinaryConversionPass();
+    gaussian = new GaussianBlurPass();
+    grayLevel = new GrayLevelPass();
+    canny = new CannyFilterPass();
+
+    imgProcessor = new ImageProcessor(&passChain, 0, 0);
+    videoProcessor = new VideoProcessor(0, 0);
+
+    connect(imgProcessor,   SIGNAL(finished(IplImage*)),    this,          SLOT(imageReady(IplImage*)));
+    connect(videoProcessor, SIGNAL(nextFrame(IplImage*)),   this,          SLOT(nextFrame(IplImage*)));
+    connect(mainWindow,     SIGNAL(destroyed()),            this,          SLOT(onClose()));
+    connect(mainWindow,     SIGNAL(changeGraphicMode(int)), this,          SLOT(changeGraphicMode(int)));
+    connect(&scene,         SIGNAL(confirmROI(QRectF*)),    this,          SLOT(confirmROI(QRectF*)));
+    connect(&scene,         SIGNAL(scaleFinish()),          mainWindow,    SLOT(showScale()));
+    connect(&scene,         SIGNAL(offset(QPointF)),        this,          SLOT(onClick(QPointF)));
+    connect(this,           SIGNAL(setScale(QString)),      parameterDock, SLOT(setScale(QString)));
+
+    methodChanged(0);
+}
+
+Controller::~Controller()
+{
+    delete hough;
+    delete mainWindow;
+    delete imgProcessor;
+}
+
+void Controller::loadImage(QImage *image)
+{
+    mainWindow->resetButtons(true, IMAGE);
+    imageClosed();
+    videoClosed();
+
+    scene.clear();
+
+    roi->clear();
+    bLoadImage = true;
+
+    scene.setItemIndexMethod(QGraphicsScene::NoIndex);
+    this->image = ImageConverter::QImageToIplImage(image);
+
+    if (currentMethod == 0)
+        methodChanged(0);
+
+    QGraphicsPixmapItem *imageItem = scene.addPixmap(QPixmap::fromImage(*image));
+    mainWindow->sceneChanged(&scene, imageItem);
+    scene.update();
+
+    currentView = IMAGE;
+}
+
+void Controller::nextFrame(IplImage *image)
+{
+    if (currentView == WEBCAM || currentView == VIDEO)
+    {
+        binaryScene.clear();
+
+        scene.setItemIndexMethod(QGraphicsScene::NoIndex);
+        this->image = image;
+
+        binaryScene.addPixmap(ImageConverter::IplImageToQPixmap(image));
+        mainWindow->binarySceneChanged(&binaryScene);
+    }
+}
+
+void Controller::loadVideo(QString string)
+{
+    mainWindow->resetButtons(true, VIDEO);
+    videoClosed();
+    imageClosed();
+<<<<<<< HEAD
+
+    // ============================================================
+    // Bug incompréhensible de OpenCV pour l'ouverture d'une vidéo
+    // ============================================================
+    cvNamedWindow("Flux Video");
+
+    video = new ExtractVideo();
+    video->loadVideo(string.toStdString());
+    videoProcessor->setInput(video);
+=======
+    cvNamedWindow("Flux Video");
+    video.loadVideo(string.toStdString());
+    videoProcessor->setInput(&video);
+>>>>>>> 20a5cd77153f602ed6fa44cb8dec94ac1f0a12f0
+
+    currentView = VIDEO;
+}
+
+void Controller::customPassChain()
+{
+    passChain.clear();
+
+    passChain.add(grayLevel);
+    passChain.add(binary);
+
+    // Filtrage des contours
+    for (int i = 0; i < 3; ++i)
+    {
+        passChain.add(gaussian);
+        passChain.add(binary);
+    }
+    passChain.add(roi);
+    passChain.add(custom);
+}
+
+void Controller::dropPassChain()
+{
+    passChain.clear();
+    passChain.add(roi);
+    passChain.add(binary);
+    passChain.add(binary);
+    passChain.add(canny);
+    binary->setMode(CV_THRESH_BINARY_INV);
+    passChain.add(binary);
+}
+
+void Controller::houghPassChain()
+{
+    passChain.clear();
+    passChain.add(grayLevel);
+    passChain.add(binary);
+    passChain.add(gaussian);
+    passChain.add(binary);
+    passChain.add(hough);
+}
+
+void Controller::process()
+{
+    // Vérification de la présence d'une image pour lancer le traitement.
+    if (image == 0)
+        return;
+    cleanItems();
+
+    bLoadImage = false;
+
+    imgProcessor->setInput(image);
+    imgProcessor->start();
+    emit processReady(false);
+}
+
+void Controller::cleanItems()
+{
+    if (edgeGroup != 0)
+    {
+        scene.destroyItemGroup(edgeGroup);
+        edgeGroup = 0;
+        if(edgeList.size() > 0)
+        {
+            for_each(edgeList.begin(),edgeList.end(),destroy);
+            edgeList.clear();
+        }
+    }
+    if (circleGroup != 0)
+    {
+        scene.destroyItemGroup(circleGroup);
+        circleGroup = 0;
+        if(circleList.size() > 0)
+        {
+            for_each(circleList.begin(),circleList.end(),destroy);
+            circleList.clear();
+        }
+    }
+}
+
+void Controller::play()
+{
+    if (videoProcessor->videoLoaded())
+        videoProcessor->start();
+    videoProcessor->play();
+}
+
+void Controller::pause()
+{
+    videoProcessor->pause();
+}
+
+void Controller::imageClosed()
+{
+    imgProcessor->terminate();
+    cleanItems();
+    emit processReady(true);
+
+    scene.clear();
+    binaryScene.clear();
+
+    cvReleaseImage(&image);
+
+    image = 0;
+    currentView = -1;
+}
+
+void Controller::videoClosed()
+{
+    cvDestroyAllWindows();
+    videoProcessor->terminate();
+
+    cleanItems();
+    scene.clear();
+    binaryScene.clear();
+
+    delete video;
+    video = 0;
+    currentView = -1;
+}
+
+void Controller::draw(Circle c)
+{ 
+
+    circleList.push_back(scene.addEllipse(c.x - c.r, c.y - c.r, c.r * 2, c.r * 2, redPen));
+
+    if (currentMethod == custom)
+    {
+        QPolygon p;
+
+        for (list<pair<int, int> >::iterator beg = c.edge.begin(), end = c.edge.end(); beg != end; ++beg)
+            p << QPoint(beg->first, beg->second);
+
+        edgeList.push_back(scene.addPolygon(p, bluePen));
+    }
+}
+
+void Controller::showParameter(bool check)
+{
+    if (check)
+        parameterDock->show();
+    else
+        parameterDock->hide();
+
+}
+
+void Controller::tickParameter(bool val)
+{
+    emit tickShowParameterOption(val);
+}
+
+void Controller::imageReady(IplImage *image)
+{
+    circles = currentMethod->getCircles();
+
+    emit processReady(true);
+
+    if (currentView == WEBCAM || currentView == VIDEO)
+    {
+        scene.clear();
+        QGraphicsPixmapItem *imageItem = scene.addPixmap(ImageConverter::IplImageToQPixmap(image));
+        mainWindow->sceneChanged(&scene, imageItem);
+    }
+    else
+    {
+        binaryScene.clear();
+        binaryScene.addPixmap(ImageConverter::IplImageToQPixmap(image));
+        mainWindow->binarySceneChanged(&binaryScene);
+    }
+
+    for_each(circles.begin(), circles.end(), bind1st(mem_fun(&Controller::draw), this));
+
+    edgeGroup = scene.createItemGroup(edgeList);
+    circleGroup = scene.createItemGroup(circleList);
+
+    mainWindow->hand();
+    changeGraphicMode(SCROLLHAND);
+
+    updateStats();
+}
+
+void Controller::updateStats()
+{
+    double radius_avg       = 0;
+    double radius_sd        = 0;
+    double radius_min       = circles.back().r;
+    double radius_max       = circles.back().r;
+    double irregularity_avg = 0;
+    double irregularity_sd  = 0;
+
+    for (list<Circle>::iterator beg = circles.begin(), end = circles.end(); beg != end; ++beg)
+    {
+        radius_avg     += beg->r;
+        irregularity_avg += beg->i;
+
+        if (beg->r < radius_min)
+            radius_min = beg->r;
+
+        if (beg->r > radius_max)
+            radius_max = beg->r;
+    }
+
+    radius_avg       /= double(circles.size());
+    irregularity_avg /= double(circles.size());
+
+    for (list<Circle>::iterator beg = circles.begin(), end = circles.end(); beg != end; ++beg)
+    {
+        radius_sd       += (beg->r - radius_avg)       * (beg->r - radius_avg);
+        irregularity_sd += (beg->i - irregularity_avg) * (beg->i - irregularity_avg);
+    }
+
+    radius_sd        /= double(circles.size());
+    irregularity_sd  /= double(circles.size());
+
+    parameterDock->setStat_radius_avg      (radius_avg * nanoScale);
+    parameterDock->setStat_radius_sd       (radius_sd * nanoScale);
+    parameterDock->setStat_radius_min      (radius_min * nanoScale);
+    parameterDock->setStat_radius_max      (radius_max * nanoScale);
+    parameterDock->setStat_irregularity_avg(irregularity_avg * nanoScale);
+    parameterDock->setStat_irregularity_sd (irregularity_sd * nanoScale);
+}
+
+int Controller::getMode()
+{
+    if (currentMethod == hough)
+        return HOUGH;
+    if (currentMethod == custom)
+        return PERSONNALISEE;
+
+    return -1;
+}
+
+void Controller::setParameters()
+{
+    if (currentMethod == hough)
+    {
+        hough->setParameters(parameterDock->getParam_H_dp(),
+                             parameterDock->getParam_H_minDist(),
+                             parameterDock->getParam_H_param1(),
+                             parameterDock->getParam_H_param2(),
+                             parameterDock->getParam_H_minRadius(),
+                             parameterDock->getParam_H_maxRadius());
+    }
+    if (currentMethod == custom)
+    {
+        custom->setParameters(parameterDock->getParam_C_minPoints(),
+                              parameterDock->getParam_C_minRadius(),
+                              parameterDock->getParam_C_maxRadius(),
+                              parameterDock->getParam_C_tolerance(),
+                              custom->getAutoDetect());
+        binary->setThreshold(parameterDock->getParam_C_threshold());
+        edgeFilter = parameterDock->getParam_C_edgeFilter();
+    }
+    if (currentMethod == static_cast<IPass*>(canny))
+    {
+        canny->setParameters(1,20,3);
+        binary->setThreshold(parameterDock->getParam_C_threshold());
+    }
+}
+
+void Controller::changeGraphicMode(int mode)
+{
+  scene.setGraphicMode(mode);
+}
+
+void Controller::openWebcam()
+{
+    mainWindow->resetButtons(true, WEBCAM);
+    videoClosed();
+    imageClosed();
+
+    video = new ExtractVideo();
+    video->loadDirectStream();
+    videoProcessor->setInput(video);
+    videoProcessor->start();
+
+    currentView = WEBCAM;
+}
+
+
+void Controller::methodChanged(int index)
+{
+   switch(index)
+    {
+    case PERSONNALISEE:
+        mainWindow->manualSelectionSetEnabled(true);
+        currentMethod = custom;
+        if (binaryVal == true)
+            mainWindow->showSecondImage();
+        customPassChain();
+        break;
+
+    case HOUGH:
+        mainWindow->manualSelectionSetEnabled(false);
+        currentMethod = hough;
+        mainWindow->hideSecondImage();
+        houghPassChain();
+        break;
+
+    case GOUTTE:
+        if (binaryVal == true)
+            mainWindow->showSecondImage();
+        dropPassChain();
+        break;
+    }
+    imgProcessor->setPassChain(&passChain);
+    setParameters();
+}
+
+void Controller::scaleMode()
+{
+    scene.setMode(1);
+}
+
+void Controller::scale(qreal realDist)
+{
+    ostringstream oss;
+    double distance;
+
+    // distance = racine( (Xa - Xb)² + (Ya - Yb)² )
+    distance = sqrt( ((scene.getFirst().x() - scene.getSecond().x())
+                   * (scene.getFirst().x() - scene.getSecond().x()))
+                   + ((scene.getFirst().y() - scene.getSecond().y()))
+                   * (scene.getFirst().y() - scene.getSecond().y()));
+    nanoScale = realDist / distance;
+    oss << realDist << " nm";
+    emit setScale(QString(oss.str().c_str()));
+    scene.setMode(0);
+    process();
+}
+
+void Controller::drawPoint(pair<int, int> point)
+{
+    scene.addLine(QLineF(QPointF(point.first, point.second), QPointF(point.first, point.second)), bluePen);
+}
+
+void Controller::confirmROI(QRectF *r)
+{
+    //! Le code ici est incorrect
+ if (r->width() == 0 || r->height() == 0)
+      roi->setParameters(0,0,scene.width(),scene.height());
+  roi->setParameters(r->x(), r->y(), r->width(), r->height());
+}
+
+void Controller::edgeBox_checked(bool val)
+{
+    edgeVal = val;
+    if (edgeGroup != 0)
+        edgeGroup->setVisible(val);
+}
+
+void Controller::binaryBox_checked(bool val)
+{
+    binaryVal = val;
+    if (val)
+        mainWindow->showSecondImage();
+    else
+        mainWindow->hideSecondImage();
+}
+
+void Controller::circleBox_checked(bool val)
+{
+    circleVal = val;
+    if (circleGroup != 0)
+        circleGroup->setVisible(val);
+}
+
+void Controller::onClose()
+{
+    cvDestroyAllWindows();
+    videoClosed();
+    imageClosed();
+    this->deleteLater();
+}
+
+void Controller::fastForward(bool enabled)
+{
+
+}
+
+void Controller::setAutoMode(bool val)
+{
+    custom->setAutoDetect(val);
+    //S'il y a une zone de selection on la supprime
+    if (!val && scene.getRegionOfInterest() != 0)
+    {
+        scene.clearRegionOfInterest();
+        roi->clear();
+    }
+}
+
+void Controller::onClick(QPointF mouse)
+{
+    custom->setOffset(mouse.x(), mouse.y());
+    // Vérification de la présence d'une image pour lancer le traitement.
+    if (image == 0)
+        return;
+
+    bLoadImage = false;
+
+    imgProcessor->setInput(image);
+    imgProcessor->start();
+    emit processReady(false);
+}

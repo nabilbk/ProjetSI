@@ -1,0 +1,4 @@
+LIBS += "/usr/lib/libcv.so" \
+"/usr/lib/libcvaux.so"
+
+

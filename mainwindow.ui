@@ -1,0 +1,636 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="baseSize">
+   <size>
+    <width>640</width>
+    <height>480</height>
+   </size>
+  </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::NoContextMenu</enum>
+  </property>
+  <property name="windowTitle">
+   <string>Institut Pascal</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="toolbar.qrc">
+    <normaloff>:/images/image-saturation-up.png</normaloff>:/images/image-saturation-up.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <layout class="QHBoxLayout" name="imageViewLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="margin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="CustomGraphicsView" name="imageView">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+        <horstretch>1</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="renderHints">
+       <set>QPainter::NonCosmeticDefaultPen</set>
+      </property>
+      <property name="dragMode">
+       <enum>QGraphicsView::ScrollHandDrag</enum>
+      </property>
+      <property name="cacheMode">
+       <set>QGraphicsView::CacheBackground</set>
+      </property>
+      <property name="viewportUpdateMode">
+       <enum>QGraphicsView::BoundingRectViewportUpdate</enum>
+      </property>
+      <property name="rubberBandSelectionMode">
+       <enum>Qt::ContainsItemShape</enum>
+      </property>
+      <property name="optimizationFlags">
+       <set>QGraphicsView::DontAdjustForAntialiasing</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="CustomGraphicsView" name="secondImage">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+        <horstretch>1</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="dragMode">
+       <enum>QGraphicsView::ScrollHandDrag</enum>
+      </property>
+      <property name="cacheMode">
+       <set>QGraphicsView::CacheBackground</set>
+      </property>
+      <property name="optimizationFlags">
+       <set>QGraphicsView::DontAdjustForAntialiasing</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="contextMenuPolicy">
+    <enum>Qt::NoContextMenu</enum>
+   </property>
+   <widget class="QMenu" name="menuAffichage">
+    <property name="title">
+     <string>Affichage</string>
+    </property>
+    <addaction name="zoomInAct"/>
+    <addaction name="zoomOutAct"/>
+    <addaction name="normalSizeAct"/>
+    <addaction name="fitToWindowAct"/>
+    <addaction name="processAct"/>
+    <addaction name="processStreamAct"/>
+   </widget>
+   <widget class="QMenu" name="menuFichier">
+    <property name="title">
+     <string>Fichier</string>
+    </property>
+    <addaction name="imageOpenAct"/>
+    <addaction name="imagesOpenAct"/>
+    <addaction name="videoOpenAct"/>
+    <addaction name="webcamOpenAct"/>
+    <addaction name="separator"/>
+    <addaction name="closeAct"/>
+    <addaction name="separator"/>
+    <addaction name="exitAct"/>
+   </widget>
+   <widget class="QMenu" name="menuParam_tres">
+    <property name="title">
+     <string>Paramètres</string>
+    </property>
+    <addaction name="showParameterAct"/>
+    <addaction name="scaleAct"/>
+    <addaction name="createFilterAct"/>
+   </widget>
+   <widget class="QMenu" name="menuVideo">
+    <property name="title">
+     <string>Vidéo</string>
+    </property>
+    <addaction name="playAct"/>
+    <addaction name="pauseAct"/>
+    <addaction name="fastAct"/>
+    <addaction name="backBegin"/>
+    <addaction name="extractAct"/>
+   </widget>
+   <widget class="QMenu" name="menuA_Propos">
+    <property name="title">
+     <string>Aide</string>
+    </property>
+    <addaction name="indexAct"/>
+    <addaction name="aboutAct"/>
+   </widget>
+   <addaction name="menuFichier"/>
+   <addaction name="menuAffichage"/>
+   <addaction name="menuParam_tres"/>
+   <addaction name="menuVideo"/>
+   <addaction name="menuA_Propos"/>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>32</height>
+    </size>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="contextMenuPolicy">
+    <enum>Qt::NoContextMenu</enum>
+   </property>
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>18</width>
+     <height>18</height>
+    </size>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="imageOpenAct"/>
+   <addaction name="imagesOpenAct"/>
+   <addaction name="videoOpenAct"/>
+   <addaction name="webcamOpenAct"/>
+   <addaction name="separator"/>
+   <addaction name="closeAct"/>
+   <addaction name="separator"/>
+   <addaction name="processAct"/>
+   <addaction name="processBatchAct"/>
+   <addaction name="processStreamAct"/>
+   <addaction name="separator"/>
+   <addaction name="handAct"/>
+   <addaction name="selectionAct"/>
+   <addaction name="manualSelectionAct"/>
+   <addaction name="separator"/>
+   <addaction name="zoomInAct"/>
+   <addaction name="zoomOutAct"/>
+   <addaction name="separator"/>
+   <addaction name="createFilterAct"/>
+   <addaction name="extractAct"/>
+   <addaction name="separator"/>
+   <addaction name="backBegin"/>
+   <addaction name="playAct"/>
+   <addaction name="pauseAct"/>
+   <addaction name="fastAct"/>
+   <addaction name="previousAct"/>
+   <addaction name="nextAct"/>
+   <addaction name="separator"/>
+  </widget>
+  <action name="imageOpenAct">
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/folder-open-slide.png</normaloff>:/images/folder-open-slide.png</iconset>
+   </property>
+   <property name="text">
+    <string>Ouvrir une image...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="exitAct">
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/control-power.png</normaloff>:/images/control-power.png</iconset>
+   </property>
+   <property name="text">
+    <string>Quitter</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="normalSizeAct">
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/magnifier-zoom-fit.png</normaloff>:/images/magnifier-zoom-fit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Taille normale</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="zoomInAct">
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/magnifier-zoom-in.png</normaloff>:/images/magnifier-zoom-in.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom +</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+=</string>
+   </property>
+  </action>
+  <action name="zoomOutAct">
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/magnifier-zoom-out.png</normaloff>:/images/magnifier-zoom-out.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom -</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+)</string>
+   </property>
+  </action>
+  <action name="fitToWindowAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/image-resize.png</normaloff>:/images/image-resize.png</iconset>
+   </property>
+   <property name="text">
+    <string>Taille de la fenêtre</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="processAct">
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/monitor--pencil.png</normaloff>:/images/monitor--pencil.png</iconset>
+   </property>
+   <property name="text">
+    <string>Traiter l'image</string>
+   </property>
+   <property name="toolTip">
+    <string>Traiter l'image</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
+   </property>
+  </action>
+  <action name="videoOpenAct">
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/folder-open-film.png</normaloff>:/images/folder-open-film.png</iconset>
+   </property>
+   <property name="text">
+    <string>Ouvrir une vidéo...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
+  </action>
+  <action name="webcamOpenAct">
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/webcam.png</normaloff>:/images/webcam.png</iconset>
+   </property>
+   <property name="text">
+    <string>Ouvrir un flux vidéo...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="processBatchAct">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/monitor-window-3d.png</normaloff>:/images/monitor-window-3d.png</iconset>
+   </property>
+   <property name="text">
+    <string>Traitement par lot...</string>
+   </property>
+   <property name="toolTip">
+    <string>Traitement par lot</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="closeAct">
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/cross.png</normaloff>:/images/cross.png</iconset>
+   </property>
+   <property name="text">
+    <string>Fermer</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+  </action>
+  <action name="fastAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/control-double.png</normaloff>:/images/control-double.png</iconset>
+   </property>
+   <property name="text">
+    <string>Avance Rapide</string>
+   </property>
+   <property name="toolTip">
+    <string>Avance Rapide</string>
+   </property>
+  </action>
+  <action name="playAct">
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/control.png</normaloff>:/images/control.png</iconset>
+   </property>
+   <property name="text">
+    <string>Lecture</string>
+   </property>
+   <property name="toolTip">
+    <string>Lecture</string>
+   </property>
+  </action>
+  <action name="pauseAct">
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/control-pause.png</normaloff>:/images/control-pause.png</iconset>
+   </property>
+   <property name="text">
+    <string>Pause</string>
+   </property>
+   <property name="toolTip">
+    <string>Pause</string>
+   </property>
+  </action>
+  <action name="showParameterAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/wrench.png</normaloff>:/images/wrench.png</iconset>
+   </property>
+   <property name="text">
+    <string>Paramètre de détection des cercles</string>
+   </property>
+  </action>
+  <action name="selectionAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/selection.png</normaloff>:/images/selection.png</iconset>
+   </property>
+   <property name="text">
+    <string>Faire une zone de sélection</string>
+   </property>
+   <property name="toolTip">
+    <string>Faire une zone de sélection</string>
+   </property>
+  </action>
+  <action name="scaleAct">
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/arrow-resize-045.png</normaloff>:/images/arrow-resize-045.png</iconset>
+   </property>
+   <property name="text">
+    <string>Définir l'échelle</string>
+   </property>
+  </action>
+  <action name="handAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/hand.png</normaloff>:/images/hand.png</iconset>
+   </property>
+   <property name="text">
+    <string>Deplacement dans l'image</string>
+   </property>
+   <property name="toolTip">
+    <string>Deplacement dans l'image</string>
+   </property>
+  </action>
+  <action name="manualSelectionAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/cursor.png</normaloff>:/images/cursor.png</iconset>
+   </property>
+   <property name="text">
+    <string>Selection Manuelle</string>
+   </property>
+   <property name="toolTip">
+    <string>Selection Manuelle</string>
+   </property>
+  </action>
+  <action name="processStreamAct">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/webcam--arrow.png</normaloff>:/images/webcam--arrow.png</iconset>
+   </property>
+   <property name="text">
+    <string>Traiter flux</string>
+   </property>
+   <property name="toolTip">
+    <string>Traiter flux</string>
+   </property>
+  </action>
+  <action name="indexAct">
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/books-brown.png</normaloff>:/images/books-brown.png</iconset>
+   </property>
+   <property name="text">
+    <string>Index</string>
+   </property>
+  </action>
+  <action name="aboutAct">
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/question.png</normaloff>:/images/question.png</iconset>
+   </property>
+   <property name="text">
+    <string>A Propos</string>
+   </property>
+  </action>
+  <action name="imagesOpenAct">
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/folder-open-image.png</normaloff>:/images/folder-open-image.png</iconset>
+   </property>
+   <property name="text">
+    <string>Ouvrir plusieurs images...</string>
+   </property>
+   <property name="toolTip">
+    <string>Ouvrir plusieurs images</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+O</string>
+   </property>
+  </action>
+  <action name="nextAct">
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/arrow.png</normaloff>:/images/arrow.png</iconset>
+   </property>
+   <property name="text">
+    <string>Image Suivante</string>
+   </property>
+   <property name="toolTip">
+    <string>Image Suivante</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="previousAct">
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/arrow-180.png</normaloff>:/images/arrow-180.png</iconset>
+   </property>
+   <property name="text">
+    <string>Image Précédente</string>
+   </property>
+   <property name="toolTip">
+    <string>Image Précédente</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="extractAct">
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/disk-return-black.png</normaloff>:/images/disk-return-black.png</iconset>
+   </property>
+   <property name="text">
+    <string>Sauvegarder</string>
+   </property>
+   <property name="toolTip">
+    <string>Sauvegarder</string>
+   </property>
+  </action>
+  <action name="backBegin">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/arrow-180.png</normaloff>:/images/arrow-180.png</iconset>
+   </property>
+   <property name="text">
+    <string>Retour au début</string>
+   </property>
+  </action>
+  <action name="createFilterAct">
+   <property name="icon">
+    <iconset resource="toolbar.qrc">
+     <normaloff>:/images/ui-list-box.png</normaloff>:/images/ui-list-box.png</iconset>
+   </property>
+   <property name="text">
+    <string>Personnalisez votre filtre ...</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CustomGraphicsView</class>
+   <extends>QGraphicsView</extends>
+   <header>customgraphicsview.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="toolbar.qrc"/>
+ </resources>
+ <connections/>
+</ui>
