@@ -1,7 +1,7 @@
 # Configuration QT
 QT          += core gui opengl
 
-# Type d'objet généré et destination
+# Type d'objet gnr et destination
 TARGET       = projet-si
 TEMPLATE     = app
 
@@ -40,7 +40,7 @@ SOURCES     += \
     sobelfilterpass.cpp \
     savedialog.cpp
 
-# Fichiers d'entête
+# Fichiers d'entte
 HEADERS     += \
                binaryconversionpass.h \
                blurpass.h \
@@ -73,7 +73,7 @@ HEADERS     += \
     savedialog.h
 
 
-# Fichiers UI à compiler
+# Fichiers UI  compiler
 FORMS       += mainwindow.ui \
     parameterdock.ui \
     imagescaledialog.ui \
@@ -82,14 +82,14 @@ FORMS       += mainwindow.ui \
     dynamicpasschain.ui \
     savedialog.ui
 
-# Fichiers include
-INCLUDEPATH +=  ./include \
-/opt/local/include/opencv/ \
-/opt/local/include/
-
 # Fichiers ressources
 RESOURCES   += toolbar.qrc
 #RC_FILE     += resources.rc
 
-# Bibliothèques à inclure
-include(projet-si.libs.user)
+# Bibliothques  inclure
+LIBS += -lopencv_core \
+        -lopencv_gpu \
+        -lopencv_video \
+        -lopencv_legacy \
+        -lopencv_imgproc \
+        -lopencv_highgui
