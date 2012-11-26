@@ -9,67 +9,67 @@ QMAKE_CXXFLAGS += -DEBUG -g -Wall
 
 # Fichier sources
 SOURCES     += \
-               binaryconversionpass.cpp \
-               blurpass.cpp \
-               houghcircledetectionpass.cpp \
-               gaussianblurpass.cpp \
-               graylevelpass.cpp \
+               Pass/binaryconversionpass.cpp \
+               Pass/blurpass.cpp \
+               Pass/houghcircledetectionpass.cpp \
+               Pass/gaussianblurpass.cpp \
+               Pass/graylevelpass.cpp \
                videoextractor.cpp \
                imageconverter.cpp \
                imageprocessor.cpp \
-               ipass.cpp \
+               Pass/ipass.cpp \
                main.cpp \
                mainwindow.cpp \
-               passchain.cpp \
+               Pass/passchain.cpp \
                controller.cpp \
                circle.cpp \
-               customcircledetectionpass.cpp \
-               roipass.cpp \
+               Pass/customcircledetectionpass.cpp \
+               Pass/roipass.cpp \
                parameterdock.cpp \
                imagescaledialog.cpp \
                customgraphicsscene.cpp \
                videoprocessor.cpp \
-               cannyfilterpass.cpp \
+               Pass/cannyfilterpass.cpp \
     customgraphicsview.cpp \
-    angledetectionpass.cpp \
-    circledetectionpass.cpp \
+    Pass/angledetectionpass.cpp \
+    Pass/circledetectionpass.cpp \
     aboutdialog.cpp \
     extractsequencedialog.cpp \
-    meanshiftfilterpass.cpp \
+    Pass/meanshiftfilterpass.cpp \
     dynamicpasschain.cpp \
-    sobelfilterpass.cpp \
+    Pass/sobelfilterpass.cpp \
     savedialog.cpp
 
 # Fichiers d'entte
 HEADERS     += \
-               binaryconversionpass.h \
-               blurpass.h \
-               houghcircledetectionpass.h \
-               gaussianblurpass.h \
-               graylevelpass.h \
+               Pass/binaryconversionpass.h \
+               Pass/blurpass.h \
+               Pass/houghcircledetectionpass.h \
+               Pass/gaussianblurpass.h \
+               Pass/graylevelpass.h \
                videoextractor.h \
                imageconverter.h \
                imageprocessor.h \
-               ipass.h \
+               Pass/ipass.h \
                mainwindow.h \
-               passchain.h \
+               Pass/passchain.h \
                controller.h \
                circle.h \
-               customcircledetectionpass.h \
-               roipass.h \
+               Pass/customcircledetectionpass.h \
+               Pass/roipass.h \
                parameterdock.h \
                imagescaledialog.h \
                customgraphicsscene.h \
                videoprocessor.h \
-               cannyfilterpass.h \
+               Pass/cannyfilterpass.h \
     customgraphicsview.h \
-    angledetectionpass.h \
-    circledetectionpass.h \
+    Pass/angledetectionpass.h \
+    Pass/circledetectionpass.h \
     aboutdialog.h \
     extractsequencedialog.h \
-    meanshiftfilterpass.h \
+    Pass/meanshiftfilterpass.h \
     dynamicpasschain.h \
-    sobelfilterpass.h \
+    Pass/sobelfilterpass.h \
     savedialog.h
 
 

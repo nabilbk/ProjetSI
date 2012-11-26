@@ -7,7 +7,7 @@
 
 #include <opencv2/opencv.hpp>
 
-#include "passchain.h"
+#include "Pass/passchain.h"
 
 /**
  * @class ImageProcessor
