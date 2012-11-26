@@ -3,20 +3,18 @@
 #include "circle.h"
 #include "ipass.h"
 
-using namespace std;
-
 /**
  * @class CircleDetectionPass
- *
- * Fournit une interface permettant de détecter des cercles sur une image
+ * Classe Virtuelle pure permettant de détecter des cercles sur une image. toto
+    @see CustomCircleDetectionPass
+    @see HoughCircleDetectionPass
  */
 class CircleDetectionPass : public IPass
 {
 protected:
-    /**
-     * Cercles détectés
+    /** @brief Cercles détectés lors du traitement de l'image.
      */
-    list<Circle> circles;
+    IPass::ListCircle circles;
 
 public:
     /**
@@ -25,14 +23,13 @@ public:
     virtual ~CircleDetectionPass();
 
     /**
-     * Accesseur : circles
-     *
-     * @return Les cercles détectés
+        @brief Retourne les cercles détectes lors du traitement de l'image
+        @return ListCircle : liste des cercles trouvés
      */
-    virtual list<Circle> getCircles() const;
+    virtual IPass::ListCircle getCircles() const;
 
     /**
-     * Vide la liste des cercles détectés
+     @brief Vide la liste des cercles détectés.
      */
-    void clear();
+    void clear(void);
 };

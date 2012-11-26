@@ -1,17 +1,13 @@
 #pragma once
 
 #include <opencv2/opencv.hpp>
-//#include <opencv2/cxcore.h>
-//#include <opencv/highgui.h>
 
 #include "circledetectionpass.h"
 
-using namespace std;
-
 /**
  * @class HoughCircleDetectionPass
- *
- * Détection des cercles par la méthode de Hough
+ * Traite une image en détectant des cercles par la méthode de Hough.
+
  */
 class HoughCircleDetectionPass : public CircleDetectionPass
 {
@@ -165,8 +161,10 @@ public:
      */
     void setParameters(double dp, double minDist, double param1, double param2, int minRad, int maxRad);
 
-    /**
-     * Implémentation : IPass
+    /** @brief Lance le traitement de l'image.
+      Efface les cercles détectés lors du précédant traitement.
+      @param IplImage *source : Image à traiter
+      @return IplImage * : image traitée.
      */
     virtual IplImage *operator()(IplImage *source);
 };

@@ -9,28 +9,28 @@
 using namespace std;
 
 /**
- * @class PassChain
- *
- * Représente une chaîne de passes
+ * @brief
+    Un PassChain est un traitement composée de plusieurs sous-traitements (passes, pass en anglais).
+    Ces sous-traitements sont modélisés ici par la classe IPass.
  */
 class PassChain
 {
 protected:
-    /**
-     * Liste des passes à exécuter
+    /** @brief Ensemble de IPass */
+    typedef std::list<IPass *> ListPass;
+
+    /** @brief Liste des passes à exécuter lors du traitement de l'image
      */
-    list<IPass*> passes;
+    ListPass passes;
 
 public:
-    /**
-     * Destructeur
-     */
     virtual ~PassChain();
 
     /**
-     * Renvoie la taille de la liste de passes
+     * @brief Retourne le nombre de passes du traitement.
+     @return int : nombre de passes du traitement.
      */
-    int size() const;
+    int size(void) const;
 
     /**
      * Vide la liste de passes

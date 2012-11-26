@@ -4,29 +4,23 @@
 
 using namespace std;
 
-/**
- * @struct Circle
- *
- * Représente un cercle
+/** @brief Représente un cerle.
  */
 struct Circle
 {
-    /**
-     * Abscisse du centre du cercle
+    /** @brief Abscisse du centre du cercle
      */
     double x;
 
-    /**
-     * Ordonnée du centre du cercle
+    /**  @brief Ordonnée du centre du cercle
      */
     double y;
 
-    /**
-     * Rayon du cercle
+    /** @brief Rayon du cercle
      */
     double r;
 
-    /**
+    /** @brief
      * Irrégularité du cercle
      *
      * Plus ce nombre est petit, plus le cercle est "parfait"

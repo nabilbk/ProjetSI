@@ -9,7 +9,7 @@ list<Circle> CircleDetectionPass::getCircles() const
     return circles;
 }
 
-void CircleDetectionPass::clear()
+void CircleDetectionPass::clear(void)
 {
     circles.clear();
 }

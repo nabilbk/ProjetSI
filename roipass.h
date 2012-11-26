@@ -4,6 +4,7 @@
 
 /**
  * @class ROIPass
+    ROI : Region Of Interest (région d'intéret).
  *
  * Classe permettant de définir une zone d'intérêt sur une image
  */

@@ -6,7 +6,7 @@ PassChain::~PassChain()
 {
 }
 
-int PassChain::size() const
+int PassChain::size(void) const
 {
     return passes.size();
 }
@@ -30,7 +30,7 @@ IplImage *PassChain::process(const IplImage *source)
     {
         result = cvCloneImage(source);
 
-        // Exécution séquentielle de chacune des passes
+        // Excution squentielle de chacune des passes
         for (list<IPass*>::iterator beg = passes.begin(), end = passes.end(); beg != end; ++beg)
             result = (**beg)(result);
     }

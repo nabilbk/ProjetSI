@@ -48,12 +48,12 @@ enum
     DYNAMIC
 };
 
-typedef struct result
+struct Result
 {
     IplImage *result;
     list<Circle> circles;
 
-} Result;
+};
 
 class Controller : public QObject
 {

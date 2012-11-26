@@ -4,7 +4,7 @@ IPass::~IPass()
 {
 }
 
-list<Circle> IPass::getCircles() const
+IPass::ListCircle IPass::getCircles(void) const
 {
-    return list<Circle>();
+    return ListCircle();
 }

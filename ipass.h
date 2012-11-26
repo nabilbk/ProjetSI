@@ -6,24 +6,27 @@
 
 /**
  * @class IPass
- *
- * Définit une interface permettant d'effectuer un traitement sur une image
+ * Classe virtuelle pure permettant d'effectuer un traitement sur une image.
+   Chaque classe fille définissent un traitement différent possible.
  */
 class IPass
 {
 public:
-    /**
-     * Destructeur
-     */
+    /** @brief ListCircle est une liste de cercle où sont stockés les cercles trouvés lors du traitement d'une image */
+    typedef list<Circle> ListCircle;
+
     virtual ~IPass();
 
-    virtual list<Circle> getCircles() const;
+
+    /** @brief Retourne les cercles détectes lors du traitement de l'image
+        @return ListCircle : liste des cercles trouvés */
+    virtual ListCircle getCircles(void) const;
 
     /**
-     * Exécute le traitement
+     * @brief Lance un traitement sur une image.
      *
-     * @param source L'image à traiter
-     * @return L'image traitée
+     * @param IplImage *source : image à traiter
+     * @return IplImage * : image en fin de traitement
      */
     virtual IplImage *operator()(IplImage *source) = 0;
 };
