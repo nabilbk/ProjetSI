@@ -1,4 +1,4 @@
-/** @mainpage */
+/** @mainpage  */
 
 
 #include <QtGui/QApplication>
