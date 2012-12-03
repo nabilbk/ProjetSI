@@ -1,7 +1,7 @@
 #pragma once
 
-#include "mainwindow.h"
-#include "parameterdock.h"
+#include "Gui/mainwindow.h"
+#include "Gui/parameterdock.h"
 #include "Pass/houghcircledetectionpass.h"
 #include "Pass/customcircledetectionpass.h"
 #include "Pass/angledetectionpass.h"
@@ -18,7 +18,7 @@
 #include "videoextractor.h"
 #include "videoprocessor.h"
 #include "Pass/roipass.h"
-#include "customgraphicsscene.h"
+#include "Gui/customgraphicsscene.h"
 
 #include <QObject>
 #include <QDesktopServices>

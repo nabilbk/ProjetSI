@@ -2,7 +2,7 @@
 
 #include <QGraphicsView>
 #include <QDragMoveEvent>
-#include <customgraphicsscene.h>
+#include "customgraphicsscene.h"
 
 /**
  * @class CustomGraphicsView

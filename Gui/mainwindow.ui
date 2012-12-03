@@ -32,7 +32,7 @@
    <string>Institut Pascal</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="toolbar.qrc">
+   <iconset resource="../toolbar.qrc">
     <normaloff>:/images/image-saturation-up.png</normaloff>:/images/image-saturation-up.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -107,7 +107,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <property name="contextMenuPolicy">
@@ -248,7 +248,7 @@
   </widget>
   <action name="imageOpenAct">
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/folder-open-slide.png</normaloff>:/images/folder-open-slide.png</iconset>
    </property>
    <property name="text">
@@ -260,7 +260,7 @@
   </action>
   <action name="exitAct">
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/control-power.png</normaloff>:/images/control-power.png</iconset>
    </property>
    <property name="text">
@@ -272,7 +272,7 @@
   </action>
   <action name="normalSizeAct">
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/magnifier-zoom-fit.png</normaloff>:/images/magnifier-zoom-fit.png</iconset>
    </property>
    <property name="text">
@@ -284,7 +284,7 @@
   </action>
   <action name="zoomInAct">
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/magnifier-zoom-in.png</normaloff>:/images/magnifier-zoom-in.png</iconset>
    </property>
    <property name="text">
@@ -296,7 +296,7 @@
   </action>
   <action name="zoomOutAct">
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/magnifier-zoom-out.png</normaloff>:/images/magnifier-zoom-out.png</iconset>
    </property>
    <property name="text">
@@ -314,7 +314,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/image-resize.png</normaloff>:/images/image-resize.png</iconset>
    </property>
    <property name="text">
@@ -326,7 +326,7 @@
   </action>
   <action name="processAct">
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/monitor--pencil.png</normaloff>:/images/monitor--pencil.png</iconset>
    </property>
    <property name="text">
@@ -341,7 +341,7 @@
   </action>
   <action name="videoOpenAct">
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/folder-open-film.png</normaloff>:/images/folder-open-film.png</iconset>
    </property>
    <property name="text">
@@ -353,7 +353,7 @@
   </action>
   <action name="webcamOpenAct">
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/webcam.png</normaloff>:/images/webcam.png</iconset>
    </property>
    <property name="text">
@@ -368,7 +368,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/monitor-window-3d.png</normaloff>:/images/monitor-window-3d.png</iconset>
    </property>
    <property name="text">
@@ -386,7 +386,7 @@
   </action>
   <action name="closeAct">
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/cross.png</normaloff>:/images/cross.png</iconset>
    </property>
    <property name="text">
@@ -401,7 +401,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/control-double.png</normaloff>:/images/control-double.png</iconset>
    </property>
    <property name="text">
@@ -413,7 +413,7 @@
   </action>
   <action name="playAct">
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/control.png</normaloff>:/images/control.png</iconset>
    </property>
    <property name="text">
@@ -425,7 +425,7 @@
   </action>
   <action name="pauseAct">
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/control-pause.png</normaloff>:/images/control-pause.png</iconset>
    </property>
    <property name="text">
@@ -443,7 +443,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/wrench.png</normaloff>:/images/wrench.png</iconset>
    </property>
    <property name="text">
@@ -455,7 +455,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/selection.png</normaloff>:/images/selection.png</iconset>
    </property>
    <property name="text">
@@ -467,7 +467,7 @@
   </action>
   <action name="scaleAct">
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/arrow-resize-045.png</normaloff>:/images/arrow-resize-045.png</iconset>
    </property>
    <property name="text">
@@ -482,7 +482,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/hand.png</normaloff>:/images/hand.png</iconset>
    </property>
    <property name="text">
@@ -497,7 +497,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/cursor.png</normaloff>:/images/cursor.png</iconset>
    </property>
    <property name="text">
@@ -515,7 +515,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/webcam--arrow.png</normaloff>:/images/webcam--arrow.png</iconset>
    </property>
    <property name="text">
@@ -527,7 +527,7 @@
   </action>
   <action name="indexAct">
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/books-brown.png</normaloff>:/images/books-brown.png</iconset>
    </property>
    <property name="text">
@@ -536,7 +536,7 @@
   </action>
   <action name="aboutAct">
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/question.png</normaloff>:/images/question.png</iconset>
    </property>
    <property name="text">
@@ -545,7 +545,7 @@
   </action>
   <action name="imagesOpenAct">
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/folder-open-image.png</normaloff>:/images/folder-open-image.png</iconset>
    </property>
    <property name="text">
@@ -560,7 +560,7 @@
   </action>
   <action name="nextAct">
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/arrow.png</normaloff>:/images/arrow.png</iconset>
    </property>
    <property name="text">
@@ -575,7 +575,7 @@
   </action>
   <action name="previousAct">
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/arrow-180.png</normaloff>:/images/arrow-180.png</iconset>
    </property>
    <property name="text">
@@ -590,7 +590,7 @@
   </action>
   <action name="extractAct">
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/disk-return-black.png</normaloff>:/images/disk-return-black.png</iconset>
    </property>
    <property name="text">
@@ -605,7 +605,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/arrow-180.png</normaloff>:/images/arrow-180.png</iconset>
    </property>
    <property name="text">
@@ -614,7 +614,7 @@
   </action>
   <action name="createFilterAct">
    <property name="icon">
-    <iconset resource="toolbar.qrc">
+    <iconset resource="../toolbar.qrc">
      <normaloff>:/images/ui-list-box.png</normaloff>:/images/ui-list-box.png</iconset>
    </property>
    <property name="text">
@@ -626,11 +626,11 @@
   <customwidget>
    <class>CustomGraphicsView</class>
    <extends>QGraphicsView</extends>
-   <header>customgraphicsview.h</header>
+   <header>Gui/customgraphicsview.h</header>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="toolbar.qrc"/>
+  <include location="../toolbar.qrc"/>
  </resources>
  <connections/>
 </ui>

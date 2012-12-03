@@ -19,26 +19,26 @@ SOURCES     += \
                imageprocessor.cpp \
                Pass/ipass.cpp \
                main.cpp \
-               mainwindow.cpp \
+               Gui/mainwindow.cpp \
                Pass/passchain.cpp \
                controller.cpp \
                circle.cpp \
                Pass/customcircledetectionpass.cpp \
                Pass/roipass.cpp \
-               parameterdock.cpp \
-               imagescaledialog.cpp \
-               customgraphicsscene.cpp \
+               Gui/parameterdock.cpp \
+               Gui/imagescaledialog.cpp \
+               Gui/customgraphicsscene.cpp \
                videoprocessor.cpp \
                Pass/cannyfilterpass.cpp \
-    customgraphicsview.cpp \
+    Gui/customgraphicsview.cpp \
     Pass/angledetectionpass.cpp \
     Pass/circledetectionpass.cpp \
-    aboutdialog.cpp \
-    extractsequencedialog.cpp \
+    Gui/aboutdialog.cpp \
+    Gui/extractsequencedialog.cpp \
     Pass/meanshiftfilterpass.cpp \
     dynamicpasschain.cpp \
     Pass/sobelfilterpass.cpp \
-    savedialog.cpp
+    Gui/savedialog.cpp
 
 # Fichiers d'entte
 HEADERS     += \
@@ -51,36 +51,36 @@ HEADERS     += \
                imageconverter.h \
                imageprocessor.h \
                Pass/ipass.h \
-               mainwindow.h \
+               Gui/mainwindow.h \
                Pass/passchain.h \
                controller.h \
                circle.h \
                Pass/customcircledetectionpass.h \
                Pass/roipass.h \
-               parameterdock.h \
-               imagescaledialog.h \
-               customgraphicsscene.h \
+               Gui/parameterdock.h \
+               Gui/imagescaledialog.h \
+               Gui/customgraphicsscene.h \
                videoprocessor.h \
                Pass/cannyfilterpass.h \
-    customgraphicsview.h \
+    Gui/customgraphicsview.h \
     Pass/angledetectionpass.h \
     Pass/circledetectionpass.h \
-    aboutdialog.h \
-    extractsequencedialog.h \
+    Gui/aboutdialog.h \
+    Gui/extractsequencedialog.h \
     Pass/meanshiftfilterpass.h \
     dynamicpasschain.h \
     Pass/sobelfilterpass.h \
-    savedialog.h
+    Gui/savedialog.h
 
 
 # Fichiers UI  compiler
-FORMS       += mainwindow.ui \
-    parameterdock.ui \
-    imagescaledialog.ui \
-    aboutdialog.ui \
-    extractsequencedialog.ui \
+FORMS       += Gui/mainwindow.ui \
+    Gui/parameterdock.ui \
+    Gui/imagescaledialog.ui \
+    Gui/aboutdialog.ui \
+    Gui/extractsequencedialog.ui \
     dynamicpasschain.ui \
-    savedialog.ui
+    Gui/savedialog.ui
 
 # Fichiers ressources
 RESOURCES   += toolbar.qrc
@@ -93,3 +93,6 @@ LIBS += -lopencv_core \
         -lopencv_legacy \
         -lopencv_imgproc \
         -lopencv_highgui
+
+OTHER_FILES += \
+    README.md
